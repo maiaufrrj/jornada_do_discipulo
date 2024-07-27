@@ -1,0 +1,23 @@
+# Configurações do jogo
+high_scores = []
+score_file = "high_scores.txt"
+question_file = "questions.xlsx"
+beep_sound = "sounds/beep.wav"
+acertou_sound = "sounds/acertou.wav"
+errou_sound = "sounds/faustao-errou.wav"
+obstacle_collision_sound = "sounds/damage.wav"
+congratulations_image_file = "img0.png"  # Caminho para a imagem de parabéns
+score_decrement_interval = 5  # Intervalo de tempo em segundos para subtrair pontos do score
+player_base_speed = 7  # Velocidade base do jogador
+player_speed_increment = 0.5  # Incremento de velocidade do jogador
+player_speed = player_base_speed  # Velocidade atual do jogador
+player_radius = 25  # Raio inicial do jogador
+correct_answers_streak = 0  # Contador de perguntas corretas consecutivas
+correct_answers = 0  # Contador total de perguntas corretas
+player_velocity = pygame.math.Vector2(0, 0)  # Velocidade inicial do jogador
+game_start_time = 0  # Tempo inicial da partida
+start_time = 0  # Tempo inicial para o cronômetro de score
+questions = []  # Lista de perguntas
+answered_questions = set()  # Perguntas já respondidas corretamente
+collision_count = 0  # Contador de colisões com obstáculos
+max_powerups_per_level = 4  # Quantidade máxima de power-ups por nível

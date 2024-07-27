@@ -1,0 +1,40 @@
+OBJETIVO DO JOGO:
+A Jornada do Discípulo é um jogo onde você controla um personagem que deve:
+1 - coletar itens
+2 - responder perguntas
+3 - evitar obstáculos para avançar nos níveis
+4 - obter a maior pontuação possível. 
+
+Use suas habilidades para se manter saudável e acumular pontos!
+
+COMANDOS BÁSICOS:
+- Setas de Movimento: Use as setas do teclado para mover o jogador (esquerda, direita, cima, baixo).
+- Teclas para Responder Perguntas: Use as teclas 1, 2, 3 e 4 para responder às perguntas exibidas na tela.
+
+CARACTERÍSTICAS DO JOGADOR:
+- O jogador controla um círculo verde que se move pela tela.
+- O raio do jogador aumenta à medida que avança nos níveis ou coleta determinados power-ups.
+- A velocidade do jogador também pode aumentar com o progresso no jogo ou com power-ups.
+
+CARACTERÍSTICAS DOS OBSTÁCULOS:
+- Os obstáculos são representados por retângulos vermelhos que se movem pela tela.
+- Colidir com obstáculos reduz a saúde do jogador.
+- Alguns obstáculos podem se mover mais rápido ou de forma errática conforme o nível aumenta.
+
+VARIAÇÃO DE VELOCIDADE:
+- A velocidade dos itens e obstáculos aumenta à medida que o jogador avança nos níveis.
+- Alguns power-ups podem temporariamente aumentar a velocidade do jogador ou reduzir a velocidade dos obstáculos.
+
+AUMENTO DA PONTUAÇÃO:
+- Coleta de Itens: Cada vez que o jogador coleta um item, a pontuação aumenta em 1 ponto.
+- Respostas Corretas: Ao responder corretamente a uma pergunta, a pontuação aumenta em 3 pontos.
+- Power-up de Pontos: Se o jogador coleta um power-up de multiplicador de pontos, pode haver um aumento adicional na pontuação, dependendo do efeito específico do power-up.
+
+DIMINUIÇÃO DA PONTUAÇÃO:
+- Respostas Incorretas: Ao responder incorretamente a uma pergunta, a pontuação diminui em 1 ponto.
+- Intervalo sem Coleta: Se o jogador não coleta nenhum item dentro de um intervalo de 20 segundos, a pontuação diminui em 1 ponto.
+- Colisão com Obstáculos: Colisões não diminuem diretamente a pontuação, mas reduzem a saúde do jogador, que pode levar ao fim do jogo se a saúde atingir zero, finalizando a pontuação atual.
+
+OUTRAS CONSIDERAÇÕES:
+- Fim do Jogo: Se a saúde do jogador chegar a zero ou a pontuação atingir zero, o jogo termina e a pontuação final é registrada.
+- Streak de Respostas Corretas: Acertos consecutivos (streak) podem levar a benefícios como vidas extras, mas não afetam diretamente a pontuação.

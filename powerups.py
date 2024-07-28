@@ -7,7 +7,6 @@ from utils import draw_text
 class PowerUpManager:
     def __init__(self):
         self.active_powerups = []
-        self.hourglass_image = self.load_hourglass_image()
         self.powerup_types = {
             "shield": {"color": blue, "duration": POWERUP_DURATION, "effect": "shield", "sound": "sounds/shield.wav", "image": self.load_powerup_image("shield")},
             "speed": {"color": red, "duration": POWERUP_DURATION, "effect": "speed", "sound": "sounds/speed.wav", "image": self.load_powerup_image("speed")},
@@ -19,9 +18,6 @@ class PowerUpManager:
             "explode": {"color": green, "duration": 0, "effect": "explode", "sound": "sounds/explode.wav", "image": self.load_powerup_image("explode")},
             "teleport": {"color": white, "duration": 0, "effect": "teleport", "sound": "sounds/teleport.wav", "image": self.load_powerup_image("teleport")}
         }
-
-    def load_hourglass_image(self):
-        return pygame.image.load("images/hourglass.png")
 
     def load_powerup_image(self, powerup_type):
         image = pygame.image.load(f"images/{powerup_type}.png")
@@ -39,10 +35,10 @@ class PowerUpManager:
             powerup_directions.append(pygame.math.Vector2(random.choice([-1, 1]), random.choice([-1, 1])))
         return powerups, powerup_speeds, powerup_directions
 
-    def apply_powerup_effect(self, powerup_type, player, obstacles, obstacle_speeds, obstacle_directions):
+    def apply_powerup_effect(self, powerup_type, player, items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions):
         start_time = time.time()
         if powerup_type in self.powerup_types:
-            self.active_powerups.append({"rect": pygame.Rect(0, 0, 0, 0), "type": powerup_type, "start_time": start_time, "duration": POWERUP_DURATION, "hourglass_image": self.hourglass_image})
+            self.active_powerups.append({"rect": pygame.Rect(0, 0, 0, 0), "type": powerup_type, "start_time": start_time, "duration": POWERUP_DURATION})
         if powerup_type == "speed":
             player.speed *= 1.5
         elif powerup_type == "slow":
@@ -63,26 +59,38 @@ class PowerUpManager:
             player.rect.x = random.randint(0, SCREEN_WIDTH - player.rect.width)
             player.rect.y = random.randint(100, SCREEN_HEIGHT - player.rect.height - 100)
 
-    def remove_powerup_effect(self, powerup, player, obstacles, obstacle_speeds, obstacle_directions):
+        elif powerup_type == "shield":
+            player.shield_active = True
+            player.shield_start_time = start_time
+
+
+    def remove_powerup_effect(self, powerup, player, items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions):
         powerup_type = powerup["type"]
         if powerup_type == "speed":
             player.speed /= 1.5
         elif powerup_type == "slow":
             for i in range(len(obstacle_speeds)):
                 obstacle_speeds[i] /= 0.1  # Restaura a velocidade dos obstáculos
+        elif powerup_type == "freeze":
+            for i in range(len(item_speeds)):
+                item_speeds[i] /= 0.01  # Restaura a velocidade original dos itens
+        elif powerup_type == "shield":
+            player.shield_active = False
 
-    def update_powerups(self, player, obstacles, obstacle_speeds, obstacle_directions):
+
+    def update_powerups(self, player, items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions):
         for powerup in self.active_powerups[:]:
             if time.time() - powerup["start_time"] > powerup["duration"]:
-                self.remove_powerup_effect(powerup, player, obstacles, obstacle_speeds, obstacle_directions)
+                self.remove_powerup_effect(powerup, player, items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions)
                 self.active_powerups.remove(powerup)
+
 
     def draw_powerups(self, screen, powerups):
         for powerup in powerups:
             screen.blit(self.powerup_types[powerup["type"]]["image"], (powerup["rect"].x, powerup["rect"].y))
 
     def draw_active_powerups(self, screen):
-        for powerup in self.active_powerups:
+        for index, powerup in enumerate(self.active_powerups):
             remaining_time = powerup["duration"] - (time.time() - powerup["start_time"])
             if remaining_time > 0:
-                draw_text(screen, f"{powerup['type']}: {int(remaining_time)}s", 24, 10, 60 + self.active_powerups.index(powerup) * 30, color=white, align="right")
+                draw_text(screen, f"{powerup['type']}: {int(remaining_time)}s", 35, 10, SCREEN_HEIGHT - 90 - (index * 30), color=green, align="left")

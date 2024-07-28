@@ -14,8 +14,38 @@ from graphics import draw_objects
 # Inicializa o Pygame
 pygame.init()
 
+# Configurações da tela
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("A Jornada do Discípulo")
+
+# Carregar sons
+acertou_sound_path = "sounds/acertou.wav"
+errou_sound_path = "sounds/faustao_errou.wav"
+obstacle_collision_sound_path = "sounds/damage.wav"
+obstacle_destroyed_sound_path = "sounds/obstacle_destroyed.wav"
+item_collect_sound_path = "sounds/collect.wav"
+game_over_sound_path = "sounds/game_over.wav"
+zerou_sound_path = "sounds/zerou.wav"
+level_up_sound_path = "sounds/level_up.wav"
+
+acertou = load_sound(acertou_sound_path)
+errou = load_sound(errou_sound_path)
+obstacle_collision = load_sound(obstacle_collision_sound_path)
+item_collect = load_sound(item_collect_sound_path)
+game_over_music = load_sound(game_over_sound_path)
+zerou_sound = load_sound(zerou_sound_path)
+level_up_sound = load_sound(level_up_sound_path)
+
+# Carregar a imagem de parabéns
+congratulations_image_file = "images/img_zerou.png"
+congratulations_image = pygame.image.load(congratulations_image_file)
+congratulations_image = pygame.transform.scale(congratulations_image, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+# Semente aleatória para garantir aleatoriedade
+random.seed(time.time())
+
 # Carrega sons
-item_collect_sound = pygame.mixer.Sound(item_collect_sound_path)
+#item_collect_sound = pygame.mixer.Sound(item_collect_sound_path)
 
 def main():
     global player, player_health, level_num, items, obstacles
@@ -43,6 +73,9 @@ def main():
 
     # Mostrar menu principal
     show_main_menu(screen)
+
+    # Oculta o cursor do mouse
+    pygame.mouse.set_visible(False)
 
     # Carregar os melhores scores
     high_scores = load_high_scores()
@@ -93,9 +126,8 @@ def main():
                             correct_answers_streak = 0
                             player.health -= 1
         
-        keys = pygame.key.get_pressed()
-        player.move(keys)
-
+        player.move()
+        
         # Verifica colisão com itens
         for item in items[:]:
             if player.rect.colliderect(item):
@@ -111,16 +143,20 @@ def main():
         # Verifica colisão com obstáculos
         for obstacle in obstacles[:]:
             if player.rect.colliderect(obstacle):
-                play_sound(obstacle_collision_sound_path)
-                collision_count += 1
-                index = obstacles.index(obstacle)
-                obstacles.remove(obstacle)
-                obstacle_speeds.pop(index)
-                obstacle_directions.pop(index)
-                player.health -= 1
-                if player.health <= 0:
-                    show_game_over_screen(screen, score, collision_count, level_num, correct_answers, correct_answers_streak, high_scores)
-                    running = False
+                if player.shield_active:
+                    obstacles.remove(obstacle)
+                    play_sound(obstacle_destroyed_sound_path)
+                else:
+                    play_sound(obstacle_collision_sound_path)
+                    collision_count += 1
+                    index = obstacles.index(obstacle)
+                    obstacles.remove(obstacle)
+                    obstacle_speeds.pop(index)
+                    obstacle_directions.pop(index)
+                    player.health -= 1
+                    if player.health <= 0:
+                        show_game_over_screen(screen, score, collision_count, level_num, correct_answers, correct_answers_streak, high_scores)
+                        running = False
 
         # Verifica colisão com itens de saúde
         for health_item in health_items[:]:
@@ -132,14 +168,14 @@ def main():
         for powerup in powerups[:]:
             if player.rect.colliderect(powerup["rect"]):
                 play_sound(powerup_manager.powerup_types[powerup["type"]]["sound"])
-                powerup_manager.apply_powerup_effect(powerup["type"], player, obstacles, obstacle_speeds, obstacle_directions)
+                powerup_manager.apply_powerup_effect(powerup["type"], player, items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions)
                 powerup_speeds.pop(powerups.index(powerup))
                 powerup_directions.pop(powerups.index(powerup))
                 powerups.remove(powerup)
                 print(f"Power-up coletado: {powerup['type']}")  # Mensagem de depuração
 
                 # # Atualiza os efeitos dos power-ups e exibe a contagem regressiva
-                powerup_manager.update_powerups(player, obstacles, obstacle_speeds, obstacle_directions)
+                powerup_manager.update_powerups(player, items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions)
 
                 # # Atualiza e desenha a contagem regressiva dos power-ups
                 powerup_manager.draw_active_powerups(screen)
@@ -148,7 +184,7 @@ def main():
         powerups, powerup_speeds, powerup_directions = move_objects(powerups, powerup_speeds, powerup_directions)
 
         # Atualiza os efeitos dos power-ups e exibe a contagem regressiva
-        powerup_manager.update_powerups(player, obstacles, obstacle_speeds, obstacle_directions)
+        powerup_manager.update_powerups(player, items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions)
 
         # Verifica se o nível foi concluído
         if not items:
@@ -163,15 +199,14 @@ def main():
         health_items, _, _ = move_objects(health_items, [0]*len(health_items), [pygame.math.Vector2(0, 0)]*len(health_items))
 
         # Aparição aleatória de itens de saúde
-        if time.time() - health_spawn_time > 10:
-            new_health_item = pygame.Rect(random.randint(0, SCREEN_WIDTH - 20), random.randint(100, SCREEN_HEIGHT - 120), 20, 20)
-            health_items.append(new_health_item)
+        if random.random() < 0.01 and not health_items:
+            health_item = pygame.Rect(random.randint(0, SCREEN_WIDTH - 20), random.randint(100, SCREEN_HEIGHT - 120), 20, 20)
+            health_items.append(health_item)
             health_spawn_time = time.time()
 
         # Remover itens de saúde após 5 segundos
-        for health_item in health_items[:]:
-            if time.time() - health_spawn_time > 5:
-                health_items.remove(health_item)
+        if health_items and time.time() - health_spawn_time > 5:
+            health_items.pop()
 
         # Cronômetro para subtrair pontos do score a cada intervalo de tempo
         if time.time() - start_time > score_decrement_interval:
@@ -200,6 +235,9 @@ def main():
     # Para qualquer música ou som em andamento
     pygame.mixer.music.stop()
 
+    # Reexibe o cursor do mouse
+    pygame.mouse.set_visible(True)
+
     # Exibe a tela de Game Over com os resultados
     show_game_over_screen(screen, score, collision_count, level_num, correct_answers, correct_answers_streak, high_scores)
 
@@ -219,5 +257,3 @@ if __name__ == "__main__":
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     main()
     pygame.quit()
-
-

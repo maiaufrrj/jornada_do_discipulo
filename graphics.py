@@ -16,3 +16,13 @@ def draw_objects(screen, items, obstacles, health_items):
         pygame.draw.rect(screen, (255, 0, 0), obstacle)
     for health_item in health_items:
         pygame.draw.rect(screen, (0, 255, 0), health_item)
+
+# def draw_objects(screen, items, obstacles, health_items, powerups):
+#     for item in items:
+#         pygame.draw.rect(screen, (255, 255, 0), item)
+#     for obstacle in obstacles:
+#         pygame.draw.rect(screen, (255, 0, 0), obstacle)
+#     for health_item in health_items:
+#         pygame.draw.rect(screen, (0, 255, 0), health_item)
+#     for powerup in powerups:
+#         screen.blit(powerup_manager.powerup_types[powerup["type"]]["image"], (powerup["rect"].x, powerup["rect"].y))

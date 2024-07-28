@@ -2,6 +2,9 @@
 __pycache__/
 *.pyc
 
+# pasta com anotacoes de desenvolvimento
+dev/
+
 # Configurações de ambiente virtual
 venv/
 .env/

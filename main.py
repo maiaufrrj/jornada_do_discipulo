@@ -11,7 +11,6 @@ from questions import QuestionManager
 from player import Player
 from graphics import draw_objects
 
-
 # Inicializa o Pygame
 pygame.init()
 

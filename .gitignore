@@ -1,1 +1,23 @@
-"__pycache__/"
+# Arquivos de cache do Python
+__pycache__/
+*.pyc
+
+# Configurações de ambiente virtual
+venv/
+.env/
+
+# Arquivos de log
+*.log
+
+# Arquivos de banco de dados SQLite
+*.sqlite3
+
+# Configurações de IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Outros arquivos temporários
+*.tmp
+*.swp

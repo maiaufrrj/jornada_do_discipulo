@@ -3,15 +3,6 @@ import random
 from config import *
 from powerups import *
 
-# def add_obstacles(obstacles, obstacle_speeds, obstacle_directions, num_obstacles, level_num):
-#     for _ in range(num_obstacles):
-#         new_obstacle = pygame.Rect(random.randint(0, SCREEN_WIDTH - 20), random.randint(100, SCREEN_HEIGHT - 120), 20, 20)
-#         obstacles.append(new_obstacle)
-#         obstacle_speeds.append(random.uniform(1.0, 2.0) + 0.5 * level_num)
-#         obstacle_directions.append(pygame.math.Vector2(random.choice([-1, 1]), random.choice([-1, 1])))
-#     return obstacles, obstacle_speeds, obstacle_directions
-
-
 def create_level(level_num, powerup_manager):
     global active_powerups
 
@@ -24,11 +15,12 @@ def create_level(level_num, powerup_manager):
     obstacle_speeds = [random.uniform(1.0, 6.0) + 0.75 * level_num for _ in range(len(obstacles))]
     item_directions = [pygame.math.Vector2(random.choice([-1, 1]), random.choice([-1, 1])) for _ in range(len(items))]
     obstacle_directions = [pygame.math.Vector2(random.choice([-1, 1]), random.choice([-1, 1])) for _ in range(len(obstacles))]
-    health_items = []
 
     powerups, powerup_speeds, powerup_directions = powerup_manager.create_powerups()
+    extra_life = powerup_manager.create_extra_life()
+    active_powerups.append(extra_life)
 
-    return items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions, health_items, powerups, powerup_speeds, powerup_directions, "Level created"
+    return items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions, powerups, powerup_speeds, powerup_directions, "Level created"
 
 def create_obstacle(obstacles, obstacle_speeds, obstacle_directions, level_num):
     new_obstacle = pygame.Rect(random.randint(0, SCREEN_WIDTH - 20), random.randint(100, SCREEN_HEIGHT - 120), 20, 20)
@@ -64,12 +56,3 @@ def move_objects(objects, speeds, directions):
                 directions[j].y *= -1
 
     return objects, speeds, directions
-
-def handle_collisions(items, obstacles, item_speeds, obstacle_speeds, item_directions, obstacle_directions):
-    for i, item in enumerate(items):
-        for j, obstacle in enumerate(obstacles):
-            if item.colliderect(obstacle):
-                item_directions[i].x *= -1
-                item_directions[i].y *= -1
-                obstacle_directions[j].x *= -1
-                obstacle_directions[j].y *= -1

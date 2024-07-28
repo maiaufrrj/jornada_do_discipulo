@@ -9,20 +9,20 @@ def load_image(image_path, size=(40, 40)):
         print(f"Warning: Could not load image: {image_path}. {e}")
         return None
 
-def draw_objects(screen, items, obstacles, health_items):
-    for item in items:
-        pygame.draw.rect(screen, (255, 255, 0), item)
-    for obstacle in obstacles:
-        pygame.draw.rect(screen, (255, 0, 0), obstacle)
-    for health_item in health_items:
-        pygame.draw.rect(screen, (0, 255, 0), health_item)
+# Carregar a imagem do item
+item_image = load_image("images/item.png", size=(40, 40))
 
-# def draw_objects(screen, items, obstacles, health_items, powerups):
-#     for item in items:
-#         pygame.draw.rect(screen, (255, 255, 0), item)
-#     for obstacle in obstacles:
-#         pygame.draw.rect(screen, (255, 0, 0), obstacle)
-#     for health_item in health_items:
-#         pygame.draw.rect(screen, (0, 255, 0), health_item)
-#     for powerup in powerups:
-#         screen.blit(powerup_manager.powerup_types[powerup["type"]]["image"], (powerup["rect"].x, powerup["rect"].y))
+# Carregar a imagem do obstáculo
+obstacle_image = load_image("images/obstacle.png", size=(60, 60))
+
+def draw_objects(screen, items, obstacles):
+    for item in items:
+        if item_image:
+            screen.blit(item_image, item.topleft)
+        else:
+            pygame.draw.rect(screen, (255, 255, 0), item)
+    for obstacle in obstacles:
+        if obstacle_image:
+            screen.blit(obstacle_image, obstacle.topleft)
+        else:
+            pygame.draw.rect(screen, (255, 0, 0), obstacle)

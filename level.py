@@ -17,7 +17,7 @@ def create_level(level_num, powerup_manager):
     obstacle_directions = [pygame.math.Vector2(random.choice([-1, 1]), random.choice([-1, 1])) for _ in range(len(obstacles))]
     health_items = []
 
-    powerups, powerup_speeds, powerup_directions = powerup_manager.create_powerups(level_num)
+    powerups, powerup_speeds, powerup_directions = powerup_manager.create_powerups()
 
     return items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions, health_items, powerups, powerup_speeds, powerup_directions, "Level created"
 

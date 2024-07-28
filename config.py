@@ -19,6 +19,7 @@ pink = (255, 192, 203)
 yellow = (255, 255, 0)
 
 # Configurações do jogo
+SIZE_POWERUPS = 40
 TIME_TO_START = 3
 POWERUP_DURATION = 15
 MAX_POWERUPS_PER_LEVEL = 3

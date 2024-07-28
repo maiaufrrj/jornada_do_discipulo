@@ -134,51 +134,69 @@ def main():
             if player.rect.colliderect(powerup["rect"]):
                 play_sound(powerup_manager.powerup_types[powerup["type"]]["sound"])
                 powerup_manager.apply_powerup_effect(powerup["type"], player, obstacles, obstacle_speeds, obstacle_directions)
+                powerup_speeds.pop(powerups.index(powerup))
+                powerup_directions.pop(powerups.index(powerup))
                 powerups.remove(powerup)
+                print(f"Power-up coletado: {powerup['type']}")  # Mensagem de depuração
+
+                # # Atualiza os efeitos dos power-ups e exibe a contagem regressiva
+                powerup_manager.update_powerups(player, obstacles, obstacle_speeds, obstacle_directions)
+
+                # # Atualiza e desenha a contagem regressiva dos power-ups
+                powerup_manager.draw_active_powerups(screen)
+
+        # Movimento dos power-ups
+        powerups, powerup_speeds, powerup_directions = move_objects(powerups, powerup_speeds, powerup_directions)
 
         # Atualiza os efeitos dos power-ups e exibe a contagem regressiva
         powerup_manager.update_powerups(player, obstacles, obstacle_speeds, obstacle_directions)
 
+        # Verifica se o nível foi concluído
+        if not items:
+            level_num += 1
+            items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions, health_items, powerups, powerup_speeds, powerup_directions, message = create_level(level_num, powerup_manager)
+            player.rect.topleft = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
+            play_sound(level_up_sound_path)
+
         # Movimento dos itens e obstáculos
         items, item_speeds, item_directions = move_objects(items, item_speeds, item_directions)
         obstacles, obstacle_speeds, obstacle_directions = move_objects(obstacles, obstacle_speeds, obstacle_directions)
+        health_items, _, _ = move_objects(health_items, [0]*len(health_items), [pygame.math.Vector2(0, 0)]*len(health_items))
 
         # Aparição aleatória de itens de saúde
-        if time.time() - health_spawn_time >= 5:
+        if time.time() - health_spawn_time > 10:
+            new_health_item = pygame.Rect(random.randint(0, SCREEN_WIDTH - 20), random.randint(100, SCREEN_HEIGHT - 120), 20, 20)
+            health_items.append(new_health_item)
             health_spawn_time = time.time()
-            health_item_rect = pygame.Rect(random.randint(0, SCREEN_WIDTH - 20), random.randint(100, SCREEN_HEIGHT - 120), 20, 20)
-            health_items.append(health_item_rect)
 
         # Remover itens de saúde após 5 segundos
-        health_items = [item for item in health_items if time.time() - health_spawn_time < 5]
+        for health_item in health_items[:]:
+            if time.time() - health_spawn_time > 5:
+                health_items.remove(health_item)
 
         # Cronômetro para subtrair pontos do score a cada intervalo de tempo
-        current_time = time.time()
-        if current_time - last_item_collect_time >= score_decrement_interval:
+        if time.time() - start_time > score_decrement_interval:
             score -= 1
-            last_item_collect_time = current_time
+            start_time = time.time()
 
-        ## Desenha na tela
-        screen.fill(black)
-        
-        # Desenha jogador
-        player.draw(screen) 
+        # Desenha na tela
+        draw_objects(screen, items, obstacles, health_items)
+        player.draw(screen)  # Desenha o jogador
+        powerup_manager.draw_powerups(screen, powerups)  # Passa a lista de powerups para o método
+        powerup_manager.draw_active_powerups(screen)
 
-        draw_objects(screen, items, obstacles, health_items, powerups)
-        powerup_manager.draw_powerups(screen)
-        
-        # Exibe a pontuação, número de vidas, nível atual e contagem de colisões
         draw_text(screen, f"Score: {score}", 24, 10, 10, color=white, align="left")
         draw_text(screen, f"Vidas: {player.health}", 24, 10, 40, color=white, align="left")
         draw_text(screen, f"Nível: {level_num}", 24, 10, 70, color=white, align="left")
         draw_text(screen, f"Colisões: {collision_count}", 24, 10, 100, color=white, align="left")
 
-        # Exibe a pergunta na parte superior da tela
         if current_question:
-            question_manager.show_question(screen, current_question)
+            draw_text(screen, current_question["pergunta"], 24, SCREEN_WIDTH // 2, 10, color=white, align="center")
+            for i in range(1, 5):
+                draw_text(screen, f"{i}. {current_question[f'opcao_{i}']}", 24, SCREEN_WIDTH // 2, 40 + i * 30, color=white, align="center")
 
         pygame.display.flip()
-        clock.tick(30)
+        clock.tick(60)
 
     # Para qualquer música ou som em andamento
     pygame.mixer.music.stop()

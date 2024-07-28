@@ -85,4 +85,4 @@ class PowerUpManager:
         for powerup in self.active_powerups:
             remaining_time = powerup["duration"] - (time.time() - powerup["start_time"])
             if remaining_time > 0:
-                draw_text(screen, f"{powerup['type']}: {int(remaining_time)}s", 24, 10, 60 + self.active_powerups.index(powerup) * 30, color=white, align="left")
+                draw_text(screen, f"{powerup['type']}: {int(remaining_time)}s", 24, 10, 60 + self.active_powerups.index(powerup) * 30, color=white, align="right")

@@ -2,7 +2,8 @@ import pygame
 
 # Configurações da tela
 screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-screen_width, screen_height = screen.get_size()
+#screen_width, screen_height = screen.get_size()
+SCREEN_WIDTH, SCREEN_HEIGHT = screen.get_size()
 pygame.display.set_caption("A Jornada do Discípulo")
 
 # Cores
@@ -25,8 +26,11 @@ PLAYER_BASE_SPEED = 7
 PLAYER_SPEED_INCREMENT = 0.5
 INITIAL_HEALTH = 3
 PLAYER_RADIUS = 25
+POINTS_FOR_CORRECT_ANSWER = 3
 
 # Arquivos
+extra_life_sound_path = "sounds/extra_life.wav"
+health_collect_sound_path = "sounds/extra_life2.wav"
 score_file = "data/high_scores.txt"
 question_file = "data/questions.xlsx"
 acertou_sound_path = "sounds/acertou.wav"

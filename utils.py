@@ -16,13 +16,6 @@ def play_sound(sound_path):
     else:
         print("Warning: No sound path provided")
 
-# def load_sound(sound_path):
-#     try:
-#         return pygame.mixer.Sound(sound_path)
-#     except pygame.error as e:
-#         print(f"Warning: Could not load sound: {sound_path}. {e}")
-#         return None
-
 def draw_text(screen, text, size, x, y, color, align="center", max_width=None):
     font = pygame.font.Font(pygame.font.match_font('arial'), size)
     if max_width:
@@ -85,11 +78,11 @@ def show_question(screen, question, selected_option=None, is_correct=None):
             option_colors[selected_option - 1] = green
         else:
             option_colors[selected_option - 1] = red
-    draw_text(screen, question["pergunta"], 24, screen_width // 2, 70, align="center", max_width=screen_width - 40)
-    draw_text(screen, f"1. {question['opcao_1']}", 24, screen_width // 2, 110, color=option_colors[0], align="center", max_width=screen_width - 40)
-    draw_text(screen, f"2. {question['opcao_2']}", 24, screen_width // 2, 150, color=option_colors[1], align="center", max_width=screen_width - 40)
-    draw_text(screen, f"3. {question['opcao_3']}", 24, screen_width // 2, 190, color=option_colors[2], align="center", max_width=screen_width - 40)
-    draw_text(screen, f"4. {question['opcao_4']}", 24, screen_width // 2, 230, color=option_colors[3], align="center", max_width=screen_width - 40)
+    draw_text(screen, question["pergunta"], 24, SCREEN_WIDTH // 2, 70, align="center", max_width=SCREEN_WIDTH - 40)
+    draw_text(screen, f"1. {question['opcao_1']}", 24, SCREEN_WIDTH // 2, 110, color=option_colors[0], align="center", max_width=SCREEN_WIDTH - 40)
+    draw_text(screen, f"2. {question['opcao_2']}", 24, SCREEN_WIDTH // 2, 150, color=option_colors[1], align="center", max_width=SCREEN_WIDTH - 40)
+    draw_text(screen, f"3. {question['opcao_3']}", 24, SCREEN_WIDTH // 2, 190, color=option_colors[2], align="center", max_width=SCREEN_WIDTH - 40)
+    draw_text(screen, f"4. {question['opcao_4']}", 24, SCREEN_WIDTH // 2, 230, color=option_colors[3], align="center", max_width=SCREEN_WIDTH - 40)
 
 def check_answer(question, answer):
     correct_answer = str(question["resposta"]).strip()
@@ -122,7 +115,7 @@ def show_start_screen(screen):
         if remaining_time == 0:
             break
 
-        draw_text(screen, f"Preparando para começar! ({remaining_time})", 36, screen_width // 2, screen_height // 2 - 50, color=white, align="center")
+        draw_text(screen, f"Preparando para começar! ({remaining_time})", 36, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50, color=white, align="center")
 
         pygame.display.flip()
         pygame.time.Clock().tick(30)
@@ -134,11 +127,11 @@ def show_pause_menu(screen):
 
     while True:
         screen.fill(black)
-        draw_text(screen, "Menu de Pausa", 48, screen_width // 2, screen_height // 2 - 100, color=white, align="center")
+        draw_text(screen, "Menu de Pausa", 48, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 100, color=white, align="center")
 
         for i, option in enumerate(menu_options):
             color = white if i != selected_option else green
-            draw_text(screen, option, 36, screen_width // 2, screen_height // 2 - 50 + i * 50, color=color, align="center")
+            draw_text(screen, option, 36, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50 + i * 50, color=color, align="center")
 
         pygame.display.flip()
         pygame.time.Clock().tick(30)
@@ -166,7 +159,7 @@ def reset_game():
     running = True
 
     # Reinicializar variáveis do jogo
-    player = pygame.Rect(screen_width // 2, screen_height // 2, PLAYER_RADIUS * 2, PLAYER_RADIUS * 2)
+    player = pygame.Rect(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, PLAYER_RADIUS * 2, PLAYER_RADIUS * 2)
     player_health = INITIAL_HEALTH
     level_num = INITIAL_LEVEL
     items, obstacles, item_speeds, obstacle_speeds, item_directions, obstacle_directions, health_items, powerups, powerup_speeds, powerup_directions, message = create_level(level_num)
@@ -193,11 +186,11 @@ def show_main_menu(screen):
 
     while True:
         screen.fill(black)
-        draw_text(screen, "Menu Principal", 48, screen_width // 2, screen_height // 2 - 100, white, align="center")
+        draw_text(screen, "Menu Principal", 48, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 100, white, align="center")
 
         for i, option in enumerate(menu_options):
             color = white if i != selected_option else green
-            draw_text(screen, option, 36, screen_width // 2, screen_height // 2 - 50 + i * 50, color=color, align="center")
+            draw_text(screen, option, 36, SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 50 + i * 50, color=color, align="center")
 
         pygame.display.flip()
         pygame.time.Clock().tick(30)
@@ -229,10 +222,10 @@ def show_rules(screen):
     screen.fill(black)
     y_offset = 100
     for line in rules:
-        draw_text(screen, line, 24, screen_width // 2, y_offset, align="center", max_width=screen_width - 40)
+        draw_text(screen, line, 24, SCREEN_WIDTH // 2, y_offset, align="center", max_width=SCREEN_WIDTH - 40)
         y_offset += 30
 
-    draw_text(screen, "Pressione Enter para voltar ao menu", 24, screen_width // 2, screen_height - 50, align="center")
+    draw_text(screen, "Pressione Enter para voltar ao menu", 24, SCREEN_WIDTH // 2, SCREEN_HEIGHT - 50, align="center")
     pygame.display.flip()
 
     while True:
@@ -244,14 +237,14 @@ def show_rules(screen):
 def show_high_scores(screen):
     high_scores = load_high_scores()
     screen.fill(black)
-    draw_text(screen, "Melhores Pontuações", 48, screen_width // 2, 50, align="center")
+    draw_text(screen, "Melhores Pontuações", 48, SCREEN_WIDTH // 2, 50, align="center")
 
     y_offset = 150
     for score, date in high_scores:
-        draw_text(screen, f"{score} - {date}", 36, screen_width // 2, y_offset, align="center")
+        draw_text(screen, f"{score} - {date}", 36, SCREEN_WIDTH // 2, y_offset, align="center")
         y_offset += 40
 
-    draw_text(screen, "Pressione Enter para voltar ao menu", 24, screen_width // 2, screen_height - 50, align="center")
+    draw_text(screen, "Pressione Enter para voltar ao menu", 24, SCREEN_WIDTH // 2, SCREEN_HEIGHT - 50, align="center")
     pygame.display.flip()
 
     while True:
@@ -272,9 +265,9 @@ def move_objects(objects, speeds, directions):
         obj_rect.y += speeds[i] * directions[i].y
         
         # Altera a direção se atingir as bordas
-        if obj_rect.left < 0 or obj_rect.right > screen_width:
+        if obj_rect.left < 0 or obj_rect.right > SCREEN_WIDTH:
             directions[i].x *= -1
-        if obj_rect.top < 100 or obj_rect.bottom > screen_height - 100:
+        if obj_rect.top < 100 or obj_rect.bottom > SCREEN_HEIGHT - 100:
             directions[i].y *= -1
         
         # Verifica colisão com outros objetos
@@ -290,25 +283,6 @@ def move_objects(objects, speeds, directions):
                 directions[j].y *= -1
 
     return objects, speeds, directions
-
-def update_powerups(player, obstacles, obstacle_speeds):
-    global active_powerups
-    current_time = time.time()
-    for powerup in active_powerups[:]:
-        remaining_time = POWERUP_DURATION - (current_time - powerup["start_time"])
-        if remaining_time <= 0:
-            if powerup["type"] == "speed":
-                player.speed = PLAYER_BASE_SPEED
-            elif powerup["type"] == "collect":
-                player.radius //= 2
-            elif powerup["type"] == "slow":
-                for i in range(len(obstacle_speeds)):
-                    obstacle_speeds[i] *= 100  # Restaura a velocidade original dos obstáculos
-            active_powerups.remove(powerup)
-        else:
-            draw_text(screen, f"{int(remaining_time)}s", 24, screen_width - 60, 20 + 50 * active_powerups.index(powerup), align="right")
-            if powerup.get("hourglass_image"):
-                screen.blit(powerup["hourglass_image"], (screen_width - 50, 10 + 50 * active_powerups.index(powerup)))
 
 
 

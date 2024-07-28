@@ -10,12 +10,22 @@ from utils import *
 from questions import QuestionManager
 from player import Player
 from graphics import draw_objects
+import sys
 
 # Inicializa o Pygame
 pygame.init()
 
+# Caminho para a imagem do ícone
+icon_path = r"images\game_icon.webp"
+
+# Carrega a imagem do ícone
+icon = pygame.image.load(icon_path)
+
+# Define o ícone da janela
+pygame.display.set_icon(icon)
+
 # Configurações da tela
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 pygame.display.set_caption("A Jornada do Discípulo")
 
 # Carregar sons
@@ -123,11 +133,13 @@ def main():
                             question_manager.mark_question_as_answered(current_question)
                             current_question = None
                         else:
+                            play_sound(errou_sound_path)
+                            score -= POINTS_FOR_CORRECT_ANSWER
+                            current_question = None
                             correct_answers_streak = 0
-                            player.health -= 1
         
         player.move()
-        
+
         # Verifica colisão com itens
         for item in items[:]:
             if player.rect.colliderect(item):

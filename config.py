@@ -51,9 +51,10 @@ score_decrement_interval = 20
 high_scores = []
 questions = []
 answered_questions = set()
-player_velocity = pygame.math.Vector2(0, 0)
+#player_velocity = pygame.math.Vector2(0, 0)
 active_powerups = []
 
+addition_obstacles_for_wrong_answer = 3
 # Contadores e tempos
 GAME_START_TIME = 0
 INITIAL_LAST_ITEM_COLLECT_TIME = 0

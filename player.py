@@ -7,6 +7,7 @@ class Player:
         self.rect = pygame.Rect(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, PLAYER_RADIUS * 2, PLAYER_RADIUS * 2)
         self.speed = PLAYER_BASE_SPEED
         self.radius = PLAYER_RADIUS
+        self.color = green
         self.velocity = pygame.math.Vector2(0, 0)
         self.health = INITIAL_HEALTH
 #       self.start_time = 0

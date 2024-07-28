@@ -3,6 +3,7 @@ import pygame
 import random
 from config import *
 from utils import draw_text
+import math
 
 class PowerUpManager:
     def __init__(self):
@@ -35,19 +36,63 @@ class PowerUpManager:
             powerup_directions.append(pygame.math.Vector2(random.choice([-1, 1]), random.choice([-1, 1])))
         return powerups, powerup_speeds, powerup_directions
 
+    
+
     def apply_powerup_effect(self, powerup_type, player, items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions):
+
+        def find_furthest_point(player, obstacles, screen_width, screen_height):
+            max_distance = -1
+            best_x, best_y = player.rect.x, player.rect.y
+            
+            for _ in range(1000):  # Teste um número grande de posições aleatórias
+                x = random.randint(0, screen_width - player.rect.width)
+                y = random.randint(100, screen_height - player.rect.height - 100)
+                min_distance = min(math.sqrt((x - obs.x) ** 2 + (y - obs.y) ** 2) for obs in obstacles)
+                
+                if min_distance > max_distance:
+                    max_distance = min_distance
+                    best_x, best_y = x, y
+                    
+            return best_x, best_y
+        
+        def teleport_player(player, obstacles, screen, screen_width, screen_height):
+            best_x, best_y = find_furthest_point(player, obstacles, screen_width, screen_height)
+            player.rect.x = best_x
+            player.rect.y = best_y
+
+            for _ in range(5):  # Pisca 5 vezes
+                screen.fill((0, 0, 0))  # Limpa a tela
+                pygame.draw.rect(screen, player.color, player.rect)  # Desenha o jogador
+                pygame.display.flip()  # Atualiza a tela
+                pygame.time.delay(300)  # Pausa por 0,1 segundo
+                screen.fill((0, 0, 0))  # Limpa a tela novamente
+                pygame.display.flip()  # Atualiza a tela
+                pygame.time.delay(300)  # Pausa por 0,1 segundo
+
+            time.sleep(0.3)  # Pausa o movimento de tudo por 0,3 segundos adicionais (totalizando 0,5 segundos)
+
         start_time = time.time()
+        
         if powerup_type in self.powerup_types:
             self.active_powerups.append({"rect": pygame.Rect(0, 0, 0, 0), "type": powerup_type, "start_time": start_time, "duration": POWERUP_DURATION})
+        
         if powerup_type == "speed":
             player.speed *= 1.5
+
+        elif powerup_type == "freeze":
+            for i in range(len(item_speeds)):
+                item_speeds[i] *= 0.1  # Reduz a velocidade dos itens para 10% da atual
+        
         elif powerup_type == "slow":
             for i in range(len(obstacle_speeds)):
                 obstacle_speeds[i] *= 0.1  # Reduz a velocidade dos obstáculos para 10% da atual
+        
         elif powerup_type == "collect":
             player.radius *= 2
+        
         elif powerup_type == "extra_life":
             player.health += 1
+
         elif powerup_type == "explode":
             num_obstacles_to_remove = min(3, len(obstacles))
             for _ in range(num_obstacles_to_remove):
@@ -55,9 +100,9 @@ class PowerUpManager:
                 obstacles.pop(idx)
                 obstacle_speeds.pop(idx)
                 obstacle_directions.pop(idx)
+
         elif powerup_type == "teleport":
-            player.rect.x = random.randint(0, SCREEN_WIDTH - player.rect.width)
-            player.rect.y = random.randint(100, SCREEN_HEIGHT - player.rect.height - 100)
+            teleport_player(player, obstacles, screen, SCREEN_WIDTH, SCREEN_HEIGHT)
 
         elif powerup_type == "shield":
             player.shield_active = True
@@ -66,14 +111,18 @@ class PowerUpManager:
 
     def remove_powerup_effect(self, powerup, player, items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions):
         powerup_type = powerup["type"]
+        
         if powerup_type == "speed":
             player.speed /= 1.5
+        
         elif powerup_type == "slow":
             for i in range(len(obstacle_speeds)):
-                obstacle_speeds[i] /= 0.1  # Restaura a velocidade dos obstáculos
+                obstacle_speeds[i] /= 0.1 # Restaura a velocidade dos obstáculos
+        
         elif powerup_type == "freeze":
             for i in range(len(item_speeds)):
-                item_speeds[i] /= 0.01  # Restaura a velocidade original dos itens
+                item_speeds[i] /= 0.1  # Restaura a velocidade original dos itens
+        
         elif powerup_type == "shield":
             player.shield_active = False
 

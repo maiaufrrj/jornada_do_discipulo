@@ -3,6 +3,15 @@ import random
 from config import *
 from powerups import *
 
+# def add_obstacles(obstacles, obstacle_speeds, obstacle_directions, num_obstacles, level_num):
+#     for _ in range(num_obstacles):
+#         new_obstacle = pygame.Rect(random.randint(0, SCREEN_WIDTH - 20), random.randint(100, SCREEN_HEIGHT - 120), 20, 20)
+#         obstacles.append(new_obstacle)
+#         obstacle_speeds.append(random.uniform(1.0, 2.0) + 0.5 * level_num)
+#         obstacle_directions.append(pygame.math.Vector2(random.choice([-1, 1]), random.choice([-1, 1])))
+#     return obstacles, obstacle_speeds, obstacle_directions
+
+
 def create_level(level_num, powerup_manager):
     global active_powerups
 

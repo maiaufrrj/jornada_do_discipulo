@@ -63,9 +63,9 @@ def main():
     global health_items, powerups, powerup_speeds, powerup_directions
     global message, score, health_spawn_time, current_question, high_scores
     global collision_count, correct_answers, correct_answers_streak
-    global player_radius, player_velocity, game_start_time, start_time
+    global player_radius, game_start_time, start_time #, player_velocity
     global last_item_collect_time, answered_questions, active_powerups, running
-    global question_manager, powerup_manager, question_file, current_question
+    global question_manager, powerup_manager, question_file, current_question, addition_obstacles_for_wrong_answer
 
     # Inicializa variáveis globais com valores iniciais
     INITIAL_VALUES = {
@@ -137,6 +137,8 @@ def main():
                             score -= POINTS_FOR_CORRECT_ANSWER
                             current_question = None
                             correct_answers_streak = 0
+                            for _ in range(addition_obstacles_for_wrong_answer):
+                                obstacles, obstacle_speeds, obstacle_directions = create_obstacle(obstacles, obstacle_speeds, obstacle_directions, level_num)
         
         player.move()
 

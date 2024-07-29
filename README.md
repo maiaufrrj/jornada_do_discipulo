@@ -1,7 +1,7 @@
 
 # A Jornada do Discípulo
 
-![Logo do Jogo](images/game_icon.png)
+![Logo do Jogo](images/game_icon.webp)
 
 A Jornada do Discípulo é um jogo educativo desenvolvido em Python, utilizando a biblioteca Pygame. O objetivo do jogo é ajudar o jogador a aprender e se divertir ao mesmo tempo, coletando itens, respondendo perguntas e evitando obstáculos para progredir através dos níveis e alcançar a maior pontuação possível.
 

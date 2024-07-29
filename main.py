@@ -1,7 +1,6 @@
 # main.py
 import pygame
 import time
-import random
 from config import *
 from level import *
 from powerups import *
@@ -11,7 +10,6 @@ from utils import *
 from questions import QuestionManager
 from player import Player
 from graphics import draw_objects
-import sys
 
 def initialize_game():
     

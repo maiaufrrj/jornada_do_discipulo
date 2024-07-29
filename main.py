@@ -1,7 +1,6 @@
 # main.py
 import pygame
 import time
-import random
 from config import *
 from level import *
 from powerups import *
@@ -11,7 +10,6 @@ from utils import *
 from questions import QuestionManager
 from player import Player
 from graphics import draw_objects
-import sys
 
 def initialize_game():
     
@@ -101,8 +99,6 @@ def update_game_state():
             item_speeds.pop(index)
             item_directions.pop(index)
             last_item_collect_time = time.time()
-            #if current_question:
-                #question_manager.mark_question_as_answered(current_question)
             current_question = question_manager.get_random_question()
             score += 1
 
@@ -121,8 +117,9 @@ def update_game_state():
                 obstacle_directions.pop(index)
                 player.health -= 1
                 if player.health <= 0:
-                    show_game_over_screen(screen, score, collision_count, level_num, correct_answers, correct_answers_streak, high_scores)
                     running = False
+                    show_game_over_screen(screen, score, collision_count, level_num, correct_answers, correct_answers_streak, high_scores)
+                    main()
 
     # Verifica colisão com power-ups
     for powerup in powerups[:]:
@@ -293,16 +290,6 @@ def main():
 
     pygame.mixer.music.stop()
     pygame.mouse.set_visible(True)
-    show_game_over_screen(screen, score, collision_count, level_num, correct_answers, correct_answers_streak, high_scores)
-
-    pygame.time.wait(TIME_TO_START * 1000)
-
-    while True:
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    show_main_menu(screen)
-                    return
 
 if __name__ == "__main__":
     pygame.init()

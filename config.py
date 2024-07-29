@@ -19,8 +19,8 @@ pink = (255, 192, 203)
 yellow = (255, 255, 0)
 
 # Configurações do jogo
-INITIAL_OBSTACLES = 20
-INITIAL_HEALTH = 3000
+INITIAL_OBSTACLES = 6
+INITIAL_HEALTH = 3
 
 # Massas dos objetos
 MASS_ITEM = 1

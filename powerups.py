@@ -9,15 +9,15 @@ class PowerUpManager:
     def __init__(self):
         self.active_powerups = []
         self.powerup_types = {
-            "shield": {"color": blue, "duration": POWERUP_DURATION, "effect": "shield", "sound": "sounds/shield.wav", "image": self.load_powerup_image("shield")},
-            # "speed": {"color": red, "duration": POWERUP_DURATION, "effect": "speed", "sound": "sounds/speed.wav", "image": self.load_powerup_image("speed")},
-            # "freeze": {"color": cyan, "duration": POWERUP_DURATION, "effect": "freeze", "sound": "sounds/freeze.wav", "image": self.load_powerup_image("freeze")},
-            # "points": {"color": orange, "duration": POWERUP_DURATION, "effect": "points", "sound": "sounds/points.wav", "image": self.load_powerup_image("points")},
-            # "slow": {"color": purple, "duration": POWERUP_DURATION, "effect": "slow", "sound": "sounds/slow.wav", "image": self.load_powerup_image("slow")},
-            # "collect": {"color": pink, "duration": POWERUP_DURATION, "effect": "collect", "sound": "sounds/collect.wav", "image": self.load_powerup_image("collect")},
-            "extra_life": {"color": yellow, "duration": 0, "effect": "extra_life", "sound": "sounds/extra_life.wav", "image": self.load_powerup_image("extra_life")},
-            # "explode": {"color": green, "duration": 0, "effect": "explode", "sound": "sounds/explode.wav", "image": self.load_powerup_image("explode")},
-            "teleport": {"color": white, "duration": 0, "effect": "teleport", "sound": "sounds/teleport.wav", "image": self.load_powerup_image("teleport")}
+             "shield": {"color": blue, "duration": POWERUP_DURATION, "effect": "shield", "sound": "sounds/shield.wav", "image": self.load_powerup_image("shield")},
+             "speed": {"color": red, "duration": POWERUP_DURATION, "effect": "speed", "sound": "sounds/speed.wav", "image": self.load_powerup_image("speed")},
+             "freeze": {"color": cyan, "duration": POWERUP_DURATION, "effect": "freeze", "sound": "sounds/freeze.wav", "image": self.load_powerup_image("freeze")},
+             "points": {"color": orange, "duration": POWERUP_DURATION, "effect": "points", "sound": "sounds/points.wav", "image": self.load_powerup_image("points")},
+             "slow": {"color": purple, "duration": POWERUP_DURATION, "effect": "slow", "sound": "sounds/slow.wav", "image": self.load_powerup_image("slow")},
+             "collect": {"color": pink, "duration": POWERUP_DURATION, "effect": "collect", "sound": "sounds/collect.wav", "image": self.load_powerup_image("collect")},
+             "extra_life": {"color": yellow, "duration": 0, "effect": "extra_life", "sound": "sounds/extra_life.wav", "image": self.load_powerup_image("extra_life")},
+             "explode": {"color": green, "duration": 0, "effect": "explode", "sound": "sounds/explode.wav", "image": self.load_powerup_image("explode")},
+             "teleport": {"color": white, "duration": 0, "effect": "teleport", "sound": "sounds/teleport.wav", "image": self.load_powerup_image("teleport")}
         }
 
     def load_powerup_image(self, powerup_type):

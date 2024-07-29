@@ -1,9 +1,11 @@
 # ui.py
+import sys
 import pygame
 import time
 from utils import *
 from config import *
 from graphics import *
+from main import main
 
 def show_main_menu(screen):
     menu_options = ["Iniciar a Partida", "Ajuda", "Melhores Pontuações", "Sair"]
@@ -36,7 +38,7 @@ def show_main_menu(screen):
                         show_high_scores(screen)
                     elif menu_options[selected_option] == "Sair":
                         pygame.quit()
-                        exit()
+                        sys.exit()
 
 def show_congratulations_screen(screen, congratulations_image_file):
     congratulations_image = load_image(congratulations_image_file, size=(SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -104,7 +106,8 @@ def show_start_screen(screen):
         pygame.time.Clock().tick(30)
 
 def show_game_over_screen(screen, score, collision_count, level_num, correct_answers, correct_answers_streak, high_scores):
-
+    pygame.mixer.music.stop()
+    play_sound(game_over_sound_path)
     save_high_scores(score, high_scores)
 
     screen.fill((0, 0, 0))
@@ -118,11 +121,10 @@ def show_game_over_screen(screen, score, collision_count, level_num, correct_ans
 
     pygame.display.flip()
 
-    waiting = True
-    while waiting:
+    while True:
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                waiting = False
+            if event.type == pygame.KEYDOWN:
+                    return
         pygame.time.Clock().tick(30)
 
 def show_pause_menu(screen):
@@ -155,7 +157,7 @@ def show_pause_menu(screen):
                         return "restart"
                     elif menu_options[selected_option] == "Sair":
                         pygame.quit()
-                        exit()
+                        sys.exit()
 
 def draw_text(screen, text, size, x, y, color=(255, 255, 255), align="center", max_width=None):
     font = pygame.font.Font(pygame.font.match_font('arial'), size)

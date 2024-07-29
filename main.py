@@ -101,6 +101,8 @@ def update_game_state():
             item_speeds.pop(index)
             item_directions.pop(index)
             last_item_collect_time = time.time()
+            #if current_question:
+                #question_manager.mark_question_as_answered(current_question)
             current_question = question_manager.get_random_question()
             score += 1
 
@@ -255,6 +257,18 @@ def render():
     draw_text(screen, f"Nível: {level_num}", 24, 10, 70, color=white, align="left")
     draw_text(screen, f"Colisões: {collision_count}", 24, 10, 100, color=white, align="left")
 
+    remaining_questions = question_manager.get_remaining_questions_count()
+    if remaining_questions>0:
+        draw_text(screen, f"Perguntas Restantes: {remaining_questions}", 24, 10, 130, color=white, align="left")
+    else:
+        pygame.mixer.music.stop()
+        play_sound(congratulations_sound_file)
+        show_congratulations_screen(screen,congratulations_image_file)
+        save_high_scores(score, high_scores)
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                show_main_menu(screen)
+        
     if current_question:
         draw_text(screen, current_question["pergunta"], 24, SCREEN_WIDTH // 2, 10, color=white, align="center")
         for i in range(1, 5):

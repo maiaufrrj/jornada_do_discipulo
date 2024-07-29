@@ -35,6 +35,9 @@ class QuestionManager:
     def mark_question_as_answered(self, question):
         self.answered_questions.add(question["pergunta"])
 
+    def get_remaining_questions_count(self):
+        return len([q for q in self.questions if q["pergunta"] not in self.answered_questions])
+
     def show_question(self, screen, question, selected_option=None, is_correct=None):
         option_colors = [white, white, white, white, white]
         if selected_option is not None:

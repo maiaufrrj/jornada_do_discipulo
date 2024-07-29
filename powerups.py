@@ -146,11 +146,6 @@ class PowerUpManager:
                 self.remove_powerup_effect(powerup, player, items, item_speeds, item_directions, obstacles, obstacle_speeds, obstacle_directions)
                 self.active_powerups.remove(powerup)
 
-
-    # def draw_powerups(self, screen, powerups):
-    #     for powerup in powerups:
-    #         pygame.draw.rect(screen, powerup["color"], powerup["rect"])
-
     def draw_powerups(self, screen, powerups):
         for powerup in powerups:
             screen.blit(self.powerup_types[powerup["type"]]["image"], (powerup["rect"].x, powerup["rect"].y))

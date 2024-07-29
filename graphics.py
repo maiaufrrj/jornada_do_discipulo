@@ -1,5 +1,6 @@
 # graphics.py
 import pygame
+from config import *
 
 def load_image(image_path, size=(40, 40)):
     try:
@@ -13,7 +14,9 @@ def load_image(image_path, size=(40, 40)):
 item_image = load_image("images/item.png", size=(40, 40))
 
 # Carregar a imagem do obstáculo
-obstacle_image = load_image("images/obstacle.png", size=(60, 60))
+obstacle_image = load_image("images/obstacle.png", size=(40, 40))
+
+
 
 def draw_objects(screen, items, obstacles):
     for item in items:
